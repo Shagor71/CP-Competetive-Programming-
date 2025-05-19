@@ -19,29 +19,49 @@ template <typename T> using o_set = tree<T, null_type, less_equal<T>, rb_tree_ta
 const int N = 2e5 + 7, MX = N, M = 1e9 + 7;
 int e;
 
-vector<int> buildArray(vector<int>& nums) {
-	for (int i = 0; i < nums.size(); ++i) {
-		int x = i;
-		cout << i << '\n';
-		while (x >= 0 and nums[x] >= 0 and nums[x] != x) {
-			int a = nums[x], b = nums[a];
-			nums[x] = -b, nums[a] = a;
-			x = b;
-			cout << a << ' ' << b << ' ' << x << '\n';
-			dbg(nums);
+int minTimeToReach(vector<vector<int>>& moveTime) {
+	int n = moveTime.size();
+	int m = moveTime[0].size();
+	int x[] = {0, 0, 1, -1};
+	int y[] = {1, -1, 0, 0};
+	priority_queue<pair<int, array<int, 3>>, vector<pair<int, array<int, 3>>>, greater<pair<int, array<int, 3>>>> pq;
+	vector<vector<vector<int>>> dp(n, vector<vector<int>> (m, vector<int> (2, INT_MAX)));
+	dp[0][0][0] = dp[0][0][1] = 0;
+	pq.push({0, {0, 0, 1}});
+	while (!pq.empty()) {
+		int res = pq.top().first;
+		int r = pq.top().second[0];
+		int c = pq.top().second[1];
+		int move = pq.top().second[2];
+		pq.pop();
+		if (r == n - 1 and c == m - 1) {
+			//dbg(dp);
+			return res;
+		}
+		for (int i = 0; i < 4; ++i) {
+			int ro = r + x[i];
+			int co = c + y[i];
+			if (0 <= ro and ro < n and 0 <= co and co < m) {
+				int need = max(res, moveTime[ro][co]) + (1 - move) + 1;
+				if (need < dp[ro][co][1 - move]) {
+					dp[ro][co][1 - move] = need;
+					pq.push({need, {ro, co, 1 - move}});
+				}
+			}
 		}
 	}
-	for (auto& i : nums) cout << i << ' ';
-	return nums;
+	return -1;
 }
 void solve() {
 
-	int n; cin >> n;
-	vector<int> nums(n);
-	for (auto& i : nums) cin >> i;
+	int n, m;
+	cin >> n >> m;
 
-	buildArray(nums);
+	vector<vector<int>> moveTime(n, vector<int>(m));
+	for (auto& i : moveTime)
+		for (auto& j : i) cin >> j;
 
+	cout << minTimeToReach(moveTime) << '\n';
 }
 /*
 

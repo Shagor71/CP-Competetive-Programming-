@@ -19,10 +19,8 @@ int f(int i, int j) {
     int &res = dp[i][j];
     if (~res) return res;
 
-    if (a[i] == b[j]) res = f(i + 1, j + 1) + 1;
-    else res = max(f(i + 1, j), f(i, j + 1));
-
-    return res;
+    if (a[i] == b[j]) return res = f(i + 1, j + 1) + 1;
+    return res = max(f(i + 1, j), f(i, j + 1));
 }
 string S;
 void string_build(int i, int j) {
@@ -32,7 +30,7 @@ void string_build(int i, int j) {
         string_build(i + 1, j + 1);
     }
     else
-        /*f(i + 1, j) >= f(i, j + 1) or*/dp[i + 1][j]  >= dp[i][j + 1] ? string_build(i + 1, j) : string_build(i, j + 1);
+        f(i + 1, j) >= f(i, j + 1) ? string_build(i + 1, j) : string_build(i, j + 1);
     return;
 }
 void solve() {

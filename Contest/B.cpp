@@ -1,30 +1,46 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+//#define _42_
+#ifdef _42_
+#include "D:\CP\debug.h"
+#else
+#define dbg(...) 42
+#endif
 
 #define int long long
 #define mk make_pair
-const int N = 700 + 7, MX = N, M = 1e9 + 7;
+const int N = 2e5 + 7, MX = N, M = 1e9 + 7;
 int e;
 
-int sq(int n) {
-	int sq = sqrtl(n);
-	return sq * sq == n;
-}
 void solve() {
 
-	int n; cin >> n;
+	int n, k;
+	cin >> n >> k;
 
-	if (sq(n * (n + 1) / 2)) {
-		cout << "-1\n";
+	multiset<int> se;
+	for (int i = 0, x; i < n; ++i) {
+		cin >> x;
+		se.insert(x);
+	}
+
+	if (*se.rbegin() - *se.begin() > k) {
+		int x = *se.rbegin() - 1;
+		se.erase(--se.end());
+		se.insert(x);
+		if (*se.rbegin() - *se.begin() > k) {
+			cout << "Jerry\n";
+			return;
+		}
+		int sum = 0;
+		for (auto i : se) sum += i;
+		cout << (sum & 1 ? "Jerry" : "Tom") << '\n';
 		return;
 	}
+	int sum = 0;
+	for (auto i : se) sum += i;
 
-	for (int i = 2; i <= n; i += 2) {
-		cout << i << ' ' << i - 1 << ' ';
-	}
-	if (n & 1) cout << n;
-	cout << '\n';
+	cout << (sum & 1 ? "Tom" : "Jerry") << '\n';
 
 }
 /*

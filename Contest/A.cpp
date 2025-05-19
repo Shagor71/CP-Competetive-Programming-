@@ -1,14 +1,26 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+//#define _42_
+#ifdef _42_
+#include "D:\CP\debug.h"
+#else
+#define dbg(...) 42
+#endif
 
+#define int long long
+#define mk make_pair
+const int N = 2e5 + 7, MX = N, M = 1e9 + 7;
+int e;
 
 void solve() {
 
-	int n;
-	cin >> n;
+	int n, m, p, q;
+	cin >> n >> m >> p >> q;
 
-	cout << (n % 3 == 1 ? "Yes" : "No") << '\n';
+
+
+	cout << ((n - p + 1)*q == p * m ? "Yes" : "No") << '\n';
 }
 /*
 

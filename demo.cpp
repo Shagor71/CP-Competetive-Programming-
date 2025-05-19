@@ -13,61 +13,59 @@ using namespace std;
 const int N = 2e5 + 7, MX = N, M = 1e9 + 7;
 int e;
 
+int dp[1005][250], mod = M;
+vector<vector<int>> next_mask(250);
+bool valid_mask(int x, int m) {
+	int prv = -1;
+	while (m--) {
+		int cur = x % 3;
+		if (cur == prv) return 0;
+		prv = cur, x /= 3;
+	}
+	return 1;
+}
+bool valid(int a, int b, int m) {
+	while (m--) {
+		if (a % 3 == b % 3) return 0;
+		a /= 3, b /= 3;
+	}
+	return 1;
+}
+int magic(int row, int mask) {
+	if (!row) return 1;
+	int &res = dp[row][mask];
+	if (~res) return res;
+	res = 0;
+	for (auto n_mask : next_mask[mask]) {
+		res += magic(row - 1, n_mask);
+		if (res >= mod) res -= mod;
+	}
+	return res;
+}
+int colorTheGrid(int m, int n) {
+	int lmt = pow(3, m);
+	vector<int> column_mask;
+	for (int mask = 1; mask <= lmt; ++mask)
+		if (valid_mask(mask, m)) column_mask.push_back(mask);
+
+	for (auto mask1 : column_mask)
+		for (auto mask2 : column_mask)
+			if (valid(mask1, mask2, m)) next_mask[mask1].push_back(mask2);
+
+	int res = 0;
+	memset(dp, -1, sizeof dp);
+	for (auto mask : column_mask) {
+		res += magic(n - 1, mask);
+		if (res >= mod) res -= mod;
+	}
+	return res;
+}
 void solve() {
-	int _n, minK, maxK;
-	cin >> _n >> minK >> maxK;
+	int m, n;
+	cin >> m >> n;
 
-	vector<int> nums(_n);
-	for (auto& i : nums) cin >> i;
+	cout << colorTheGrid(m, n) << '\n';
 
-	int mn = 0, mx = 0, n = nums.size();
-
-	if (minK == maxK) {
-		long long res = 0;
-		for (int i = 0; i < n;) {
-			long long cnt = 0, x = nums[i];
-			while (i < n and nums[i] == x) cnt++, i++;
-			res += cnt * (cnt + 1) / 2;
-		}
-		cout << res << '\n';
-		return;
-	}
-	vector<int> prf(n + 1);
-	prf[0] = 0;
-	for (int i = 1; i <= n; ++i) {
-		if (nums[i - 1] < minK or maxK < nums[i - 1]) {
-			mn = mx = i;
-			prf[i] = i;
-			continue;
-		}
-		if (nums[i - 1] == minK or nums[i - 1] == maxK) {
-			prf[i] = max(mn, mx);
-			if (nums[i - 1] == minK) mn = i;
-			if (nums[i - 1] == maxK) mx = i;
-			continue;
-		}
-		prf[i] = max({mn, mx, prf[i - 1]});
-	}
-	mn = mx = n + 1;
-	long long l, r, track = n + 1, res = 0;
-	for (int i = n; i; --i) {
-		if (nums[i - 1] == maxK) {
-			l = i - prf[i] - 1;
-			r = track - mn;
-			cout << l << ' ' << r << ' ' << i << ' ' << prf[i] << ' ' << track << ' ' << mn << '\n';
-			if (r > 0) res += l + r + l * r - (l != 0);
-			mx = i;
-		}
-		if (nums[i - 1] == minK) {
-			l = i - prf[i] - 1;
-			r = track - mx;
-			if (r > 0) res += l + r + l * r - (l != 0);
-			cout << l << ' ' << r << ' ' << i << ' ' << prf[i] << ' ' << track << ' ' << mx << '\n';
-			mn = i;
-		}
-		if (nums[i - 1] < minK or maxK < nums[i - 1]) track = i;
-	}
-	cout << res << '\n';
 }
 /*
 

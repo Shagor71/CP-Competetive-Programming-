@@ -30,7 +30,7 @@ void solve() {
                 one[j] = 1;
             }
         if(!visit and !non_visit) continue;
-        cout << i << ' ' << non_visit << ' ' << visit << '\n';
+        //cout << i << ' ' << non_visit << ' ' << visit << '\n';
         int tmp1 = exp(2, non_visit)-1, tmp2 = exp(2, visit);
         tmp1 += 1ll*M, tmp1 %= M;
         int tmp = 1ll * tmp1 * tmp2 % M;
@@ -38,9 +38,10 @@ void solve() {
     }
     int all_ways = exp(2, n) - 1;
     all_ways += 1ll*M, all_ways %= M;
+    cout << all_ways << '\n';
     res = (all_ways - res) % M, res += 1ll*M, res %= M;
 
-    cout << res << '\n';
+    //cout << res << '\n';
 
 }
 /*
