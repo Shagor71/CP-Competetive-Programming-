@@ -10,20 +10,19 @@ void solve() {
     int n, k, d;
     cin >> n >> k >> d;
 
-    vector<int> a(n), cnt(n+1, 0);
+    vector<int> a(n), v(k);
     int j = 1;
-    for(auto& i : a) {
+    for(auto& i : a) 
         cin >> i, i = j++ - i;
-        if(i >= 0) cnt[i]++;
-    }
-    vector<int> v(k);
     for(auto& i : v) cin >> i;
-
+    
     int res = 0;
-    for(int i = 1; i <= k; ++i) {
-        int tmp = ;
-        for(int i )
-        res = max(res, tmp + max(0, (d - i)/2));
+    for(int i = 1; i <= min(d, 2*n + 1); ++i) {
+        int tmp = 0;
+        for(auto j : a) tmp += !j;
+        res = max(res, tmp + (d-i)/2);
+        int day = i%k? i%k : k;
+        for(int j = 0; j < v[day-1]; ++j) a[j]--;
     }
 
     cout << res << '\n';
