@@ -1,79 +1,72 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
 
-//#define _42_
-#ifdef _42_
-#include "D:\CP\debug.h"
-#else
-#define dbg(...) 42
-#endif
+#define ll long long
+#define fast ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define pb push_back
+#define ok cout<<"ok"<<endl<<flush;
+#define endl '\n'
+#define INF 1e17
+const ll M = 998244353;
+const ll N = 1e6 + 1;
+const ll LOG = 11;
+void debug(vector<ll> v) {for (auto it : v) {cout << it << " ";} cout << endl;}
+ll n, m;
+int32_t main()
+{
+	fast
+	ll i, j = 1, k, p, q, tc = 1, cs = 0;
+	cin >> tc;
+	while (tc--)
+	{
+		cin >> n;
+		vector<ll>a(n + 1), b(n + 1), c;
+		for (i = 1; i <= n; i++) {cin >> a[i];}
+		for (i = 1; i <= n; i++) {cin >> b[i];}
+		ll possible = 1;
+		c = a;
+		for (i = 1; i <= n; i++)
+		{
+			if (a[i] == b[i]) {continue;}
+			if (a[i - 1] == b[i]) {a[i] = b[i]; continue;}
 
-#define int long long
-#define mk make_pair
-const int N = 2e5 + 7, MX = N, M = 1e9 + 7;
-int e;
+			for (j = i + 1; j <= n; j++)
+			{
+				if (a[j] == b[i]) {break;}
+			}
+			if (j == n + 1) {break;}
+			for (k = i; k <= j; k++)
+			{
+				a[k] = b[i];
+			}
+		}
+		if (a == b)
+		{
+			cout << "YES" << endl; continue;
+		}
 
-int dp[1005][250], mod = M;
-vector<vector<int>> next_mask(250);
-bool valid_mask(int x, int m) {
-	int prv = -1;
-	while (m--) {
-		int cur = x % 3;
-		if (cur == prv) return 0;
-		prv = cur, x /= 3;
+		c.pb(0);
+		b.pb(0);
+		reverse(c.begin(), c.end());
+		reverse(b.begin(), b.end());
+		c.pop_back();
+		b.pop_back();
+		for (i = 1; i <= n; i++)
+		{
+			if (c[i] == b[i]) {continue;}
+			if (c[i - 1] == b[i]) {c[i] = b[i]; continue;}
+
+			for (j = i + 1; j <= n; j++)
+			{
+				if (c[j] == b[i]) {break;}
+			}
+			if (j == n + 1) {break;}
+			for (k = i; k <= j; k++)
+			{
+				c[k] = b[i];
+			}
+		}
+		if (c == b) {cout << "YES" << endl; continue;}
+		cout << "NO" << endl;
 	}
-	return 1;
-}
-bool valid(int a, int b, int m) {
-	while (m--) {
-		if (a % 3 == b % 3) return 0;
-		a /= 3, b /= 3;
-	}
-	return 1;
-}
-int magic(int row, int mask) {
-	if (!row) return 1;
-	int &res = dp[row][mask];
-	if (~res) return res;
-	res = 0;
-	for (auto n_mask : next_mask[mask]) {
-		res += magic(row - 1, n_mask);
-		if (res >= mod) res -= mod;
-	}
-	return res;
-}
-int colorTheGrid(int m, int n) {
-	int lmt = pow(3, m);
-	vector<int> column_mask;
-	for (int mask = 1; mask <= lmt; ++mask)
-		if (valid_mask(mask, m)) column_mask.push_back(mask);
-
-	for (auto mask1 : column_mask)
-		for (auto mask2 : column_mask)
-			if (valid(mask1, mask2, m)) next_mask[mask1].push_back(mask2);
-
-	int res = 0;
-	memset(dp, -1, sizeof dp);
-	for (auto mask : column_mask) {
-		res += magic(n - 1, mask);
-		if (res >= mod) res -= mod;
-	}
-	return res;
-}
-void solve() {
-	int m, n;
-	cin >> m >> n;
-
-	cout << colorTheGrid(m, n) << '\n';
-
-}
-/*
-
-
-*/
-signed main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	//int tc; cin >> tc; while (tc--)
-	solve();
 }
