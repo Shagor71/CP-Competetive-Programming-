@@ -1,8 +1,9 @@
+//https://cses.fi/problemset/result/13175339/
 #include <bits/stdc++.h>
 using namespace std;
 
 #define ll long long
-#define mk make_pair
+#define mk make_p
 const int N = 2e5 + 7, MX = N, M = 1e9 + 7;
 int e;
 struct Hashing {
@@ -41,7 +42,7 @@ void solve() {
     cin >> s;
 
     H.hashing(s);
-t
+
     int l, r;
     cin >> l >> r;
     pair<ll, ll> res = H.get_hash(l, r);
