@@ -4,22 +4,22 @@ using namespace std;
 vector<int> Pi_table(string s) {
     int n = s.size();
     vector<int> pi_table(n, 0);
-    pi_table[0] = -1;
-    for(int i = 0, j = 1; j < n; ++j) {
-        if(s[i] == s[j]) pi_table[j] = ++i;
-        else {
-            i--;
-            while(~i) {
-                i = pi_table[i];
-                if(~i and s[i] == s[j]) {
-                    pi_table[j] = i+1;
-                    break;
-                }
-            }
-            i++;
+    for(int i = 1, j = 0; i < n; ++i) {
+        if(s[i] == s[j]) {
+            pi_table[i] = ++j;
+            continue;
         }
+        j--;
+        while(~j) {
+            j = pi_table[j];
+            if(s[j] == s[i]) {
+                pi_table[i] = j + 1;
+                break;
+            }
+            j--;
+        }
+        j++;
     }
-    pi_table[0] = 0;
     return pi_table;
 }
 void solve() {
@@ -29,7 +29,6 @@ void solve() {
     vector<int> pi_table = Pi_table(s);
     
     for(auto i : pi_table) cout << i << ' ';
-
 }
 /*
 
