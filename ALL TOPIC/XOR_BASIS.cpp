@@ -3,25 +3,54 @@
 using namespace std;
 #define ll long long
 
-void insert(vector<ll>&basis, ll mask) {
-    for(int i = 63; i >= 0; --i) 
-        if((mask & 1ll << i)) {
-            if(!basis[i]) {
-                basis[i] = mask;
-                return;
+vector<string> spellchecker(vector<string>& wordlist, vector<string>& queries) {
+    map<string, int> mp, m;
+    int i = 1;
+    for (auto s : wordlist) {
+        mp[s] = 1;
+        string ns;
+        for (auto c : s) {
+            if (c == 'a' or c == 'e' or c == 'i' or c == 'o' or c == 'u' or c == 'A' or c == 'E' or c == 'I' or c == 'O' or c == 'U')
+                ns += '#';
+            else if ('A' <= c and c <= 'Z') {
+                char ch = c + 32;
+                ns += ch;
             }
-            mask ^= basis[i];
+            else
+                ns += c;
         }
-    return;
+        m[ns] = i++;
+    }
+    vector<string> res;
+    for (auto s : queries) {
+        if (mp[s]) {
+            res.push_back(s);
+            continue;
+        }
+        string ns;
+        for (auto c : s) {
+            if (c == 'a' or c == 'e' or c == 'i' or c == 'o' or c == 'u' or c == 'A' or c == 'E' or c == 'I' or c == 'O' or c == 'U')
+                ns += '#';
+            else if ('A' <= c and c <= 'Z') {
+                char ch = c + 32;
+                ns += ch;
+            }
+            else
+                ns += c;
+        }
+        if (mp[ns]) {
+            res.push_back(wordlist[mp[ns] - 1]);
+            continue;
+        }
+        res.push_back("");
+    }
+    return res;
 }
 int main() {
-    int n; cin >> n;
-    
-    vector<ll> basis(65, 0);
-    for(int i = 0; i < n; ++i) {
-        ll mask; cin >> mask;
-        insert(basis, mask);
-    }
-    for(auto i : basis) 
-        if(i) cout << i << ' '; 
+    vector<string> a(1), b(1);
+    for (auto& i : a) cin >> i;
+    for (auto& i : b) cin >> i;
+
+    spellchecker(a, b);
+
 }

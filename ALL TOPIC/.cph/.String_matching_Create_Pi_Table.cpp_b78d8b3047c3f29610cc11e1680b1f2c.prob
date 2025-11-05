@@ -1,0 +1,1 @@
+{"name":"Local: String_matching_Create_Pi_Table","url":"d:\\CP\\ALL TOPIC\\String_matching_Create_Pi_Table.cpp","tests":[{"id":1762334717230,"input":"acadacac","output":"0 0 1 0 1 2 3 2"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\CP\\ALL TOPIC\\String_matching_Create_Pi_Table.cpp","group":"local","local":true}
